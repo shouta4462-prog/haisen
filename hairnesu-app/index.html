@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#1d4ed8" />
+<meta name="description" content="PCでもスマホでも使える配線表(ケーブル配線一覧)作成アプリ" />
+<title>配線表アプリ</title>
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icons/icon.svg" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- ===== ヘッダー ===== -->
+    <header class="app-header">
+      <div class="app-header__left">
+        <button id="btn-menu" class="icon-btn" aria-label="メニュー" title="配線表一覧">
+          <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+        </button>
+        <h1 id="sheet-title" class="app-title" title="タップして名前を変更">配線表</h1>
+      </div>
+      <div class="app-header__right">
+        <span id="sync-status" class="sync-status" title="同期状態">オフライン保存</span>
+        <button id="btn-account" class="icon-btn" aria-label="アカウント" title="クラウド同期・ログイン">
+          <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== 配線表一覧サイドパネル ===== -->
+    <aside id="sheet-drawer" class="drawer" aria-hidden="true">
+      <div class="drawer__header">
+        <span>配線表一覧</span>
+        <button id="btn-close-drawer" class="icon-btn" aria-label="閉じる">✕</button>
+      </div>
+      <ul id="sheet-list" class="sheet-list"></ul>
+      <button id="btn-new-sheet" class="btn btn--block">＋ 新しい配線表</button>
+    </aside>
+    <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+
+    <!-- ===== ツールバー ===== -->
+    <div class="toolbar">
+      <button id="btn-add-row" class="btn btn--primary">＋ 行を追加</button>
+      <button id="btn-import-csv" class="btn">CSV読込</button>
+      <button id="btn-export-csv" class="btn">CSV書出</button>
+      <input id="csv-file-input" type="file" accept=".csv,text/csv" hidden />
+      <span class="toolbar__spacer"></span>
+      <input id="search-box" class="search-box" type="search" placeholder="検索(接続元・接続先・ケーブル名など)" />
+    </div>
+
+    <!-- ===== 配線表(テーブル) ===== -->
+    <main class="table-wrap">
+      <table id="wire-table" class="wire-table">
+        <thead>
+          <tr>
+            <th class="col-no">No.</th>
+            <th class="col-text">接続元</th>
+            <th class="col-text">接続元端子</th>
+            <th class="col-text">接続先</th>
+            <th class="col-text">接続先端子</th>
+            <th class="col-text">ケーブル種別</th>
+            <th class="col-text">ケーブルNo.</th>
+            <th class="col-short">長さ(m)</th>
+            <th class="col-short">色</th>
+            <th class="col-text">備考</th>
+            <th class="col-action"></th>
+          </tr>
+        </thead>
+        <tbody id="wire-tbody"></tbody>
+      </table>
+      <p id="empty-hint" class="empty-hint" hidden>行がありません。「＋ 行を追加」で配線を登録しましょう。</p>
+    </main>
+
+    <footer class="app-footer">
+      <span id="row-count">0 件</span>
+    </footer>
+  </div>
+
+  <!-- ===== アカウント/同期モーダル ===== -->
+  <div id="account-modal" class="modal" hidden>
+    <div class="modal__card">
+      <div class="modal__header">
+        <span>クラウド同期</span>
+        <button id="btn-close-account" class="icon-btn" aria-label="閉じる">✕</button>
+      </div>
+      <div class="modal__body" id="account-body">
+        <!-- JS で描画 -->
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
