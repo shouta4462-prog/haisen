@@ -11,9 +11,9 @@ const state = {
   cloudUser: null,
 };
 
+// 1シート = 1つの端子台。行は「その端子台の1つの端子」を表す。
 const ROW_FIELDS = [
-  "from",
-  "fromTerminal",
+  "terminalNo",
   "to",
   "toTerminal",
   "cableType",
@@ -79,7 +79,7 @@ function setSyncStatus(text, kind) {
 async function loadSheets() {
   let sheets = await db.getAllSheets();
   if (sheets.length === 0) {
-    const sheet = { id: uid(), name: "配線表1", createdAt: Date.now(), updatedAt: Date.now() };
+    const sheet = { id: uid(), name: "端子台1", createdAt: Date.now(), updatedAt: Date.now() };
     await db.putSheet(sheet);
     sheets = [sheet];
   }
@@ -133,7 +133,7 @@ function renderTitle() {
 async function createSheet() {
   const sheet = {
     id: uid(),
-    name: `配線表${state.sheets.length + 1}`,
+    name: `端子台${state.sheets.length + 1}`,
     createdAt: Date.now(),
     updatedAt: Date.now(),
   };
@@ -150,10 +150,10 @@ async function createSheet() {
 
 async function deleteSheet(id) {
   if (state.sheets.length <= 1) {
-    showToast("最後の配線表は削除できません");
+    showToast("最後の端子台は削除できません");
     return;
   }
-  if (!confirm("この配線表を削除しますか?中の配線データも削除されます。")) return;
+  if (!confirm("この端子台を削除しますか?中の配線データも削除されます。")) return;
   await db.deleteSheet(id);
   await db.deleteRowsBySheet(id);
   cloud.deleteRemoteSheet(id).catch(() => {});
@@ -170,7 +170,7 @@ async function deleteSheet(id) {
 async function renameSheet() {
   const sheet = state.sheets.find((s) => s.id === state.activeSheetId);
   if (!sheet) return;
-  const name = prompt("配線表の名前", sheet.name);
+  const name = prompt("端子台の名前", sheet.name);
   if (!name || !name.trim()) return;
   sheet.name = name.trim();
   sheet.updatedAt = Date.now();
@@ -249,8 +249,7 @@ async function addRow() {
     id: uid(),
     sheetId: state.activeSheetId,
     order: maxOrder + 1,
-    from: "",
-    fromTerminal: "",
+    terminalNo: "",
     to: "",
     toTerminal: "",
     cableType: "",
@@ -281,7 +280,7 @@ async function deleteRow(id) {
 function handleExportCsv() {
   const sheet = state.sheets.find((s) => s.id === state.activeSheetId);
   const csv = rowsToCsv(state.rows);
-  const filename = `${(sheet?.name || "配線表").replace(/[\\/:*?"<>|]/g, "_")}.csv`;
+  const filename = `${(sheet?.name || "端子台").replace(/[\\/:*?"<>|]/g, "_")}.csv`;
   downloadCsv(filename, csv);
   showToast("CSVを書き出しました");
 }
@@ -294,7 +293,7 @@ async function handleImportCsvFile(file) {
     return;
   }
   const mode = confirm(
-    `${parsed.length} 行を読み込みます。\n「OK」= 今の配線表に追記 / 「キャンセル」= 今の配線表を置き換え`
+    `${parsed.length} 行を読み込みます。\n「OK」= 今の端子台に追記 / 「キャンセル」= 今の端子台を置き換え`
   )
     ? "append"
     : "replace";
@@ -320,7 +319,7 @@ async function handleImportCsvFile(file) {
   showToast(`${newRows.length} 行を読み込みました`);
 }
 
-// ===================== ドロワー(配線表一覧) =====================
+// ===================== ドロワー(端子台一覧) =====================
 function openDrawer() {
   el.drawer.classList.add("is-open");
   el.drawerBackdrop.hidden = false;
@@ -343,7 +342,7 @@ function renderAccountModal() {
 
   if (!configured) {
     el.accountBody.innerHTML = `
-      <p>Supabase を使うと、この配線表をPCとスマホの間でクラウド同期できます。
+      <p>Supabase を使うと、この端子台データをPCとスマホの間でクラウド同期できます。
       未設定でもこのアプリは端末内保存でそのまま使えます。</p>
       <label for="cfg-url">Supabase Project URL</label>
       <input id="cfg-url" type="url" placeholder="https://xxxx.supabase.co" />
@@ -394,7 +393,7 @@ function renderAccountModal() {
 
   el.accountBody.innerHTML = `
     <p>ログイン中: <strong>${user.email}</strong></p>
-    <p>この端末の配線表はクラウドと同期されます。</p>
+    <p>この端末の端子台データはクラウドと同期されます。</p>
     <div class="modal__actions">
       <button id="cloud-sync-now" class="btn btn--primary">今すぐ同期</button>
       <button id="cloud-signout" class="btn btn--danger">ログアウト</button>

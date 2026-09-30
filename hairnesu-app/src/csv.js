@@ -2,8 +2,7 @@
 // Excel(Windows/Mac)でそのまま開けるよう UTF-8 BOM 付きで出力する。
 
 export const CSV_COLUMNS = [
-  { key: "from", label: "接続元" },
-  { key: "fromTerminal", label: "接続元端子" },
+  { key: "terminalNo", label: "端子番号" },
   { key: "to", label: "接続先" },
   { key: "toTerminal", label: "接続先端子" },
   { key: "cableType", label: "ケーブル種別" },

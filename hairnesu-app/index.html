@@ -29,14 +29,14 @@
       </div>
     </header>
 
-    <!-- ===== 配線表一覧サイドパネル ===== -->
+    <!-- ===== 端子台一覧サイドパネル ===== -->
     <aside id="sheet-drawer" class="drawer" aria-hidden="true">
       <div class="drawer__header">
-        <span>配線表一覧</span>
+        <span>端子台一覧</span>
         <button id="btn-close-drawer" class="icon-btn" aria-label="閉じる">✕</button>
       </div>
       <ul id="sheet-list" class="sheet-list"></ul>
-      <button id="btn-new-sheet" class="btn btn--block">＋ 新しい配線表</button>
+      <button id="btn-new-sheet" class="btn btn--block">＋ 新しい端子台</button>
     </aside>
     <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
 
@@ -47,17 +47,16 @@
       <button id="btn-export-csv" class="btn">CSV書出</button>
       <input id="csv-file-input" type="file" accept=".csv,text/csv" hidden />
       <span class="toolbar__spacer"></span>
-      <input id="search-box" class="search-box" type="search" placeholder="検索(接続元・接続先・ケーブル名など)" />
+      <input id="search-box" class="search-box" type="search" placeholder="検索(端子番号・接続先・ケーブル名など)" />
     </div>
 
-    <!-- ===== 配線表(テーブル) ===== -->
+    <!-- ===== 端子台(テーブル。1シート=1端子台、1行=1端子) ===== -->
     <main class="table-wrap">
       <table id="wire-table" class="wire-table">
         <thead>
           <tr>
             <th class="col-no">No.</th>
-            <th class="col-text">接続元</th>
-            <th class="col-text">接続元端子</th>
+            <th class="col-text">端子番号</th>
             <th class="col-text">接続先</th>
             <th class="col-text">接続先端子</th>
             <th class="col-text">ケーブル種別</th>
@@ -70,7 +69,7 @@
         </thead>
         <tbody id="wire-tbody"></tbody>
       </table>
-      <p id="empty-hint" class="empty-hint" hidden>行がありません。「＋ 行を追加」で配線を登録しましょう。</p>
+      <p id="empty-hint" class="empty-hint" hidden>行がありません。「＋ 行を追加」で端子を登録しましょう。</p>
     </main>
 
     <footer class="app-footer">
